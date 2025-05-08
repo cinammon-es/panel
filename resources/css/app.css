@@ -157,3 +157,40 @@
         @apply bg-background text-foreground;
     }
 }
+@layer utilities {
+    .cyber-border {
+        position: relative;
+        border-radius: 0.75rem;
+        overflow: hidden;
+        z-index: 0;
+    }
+
+    .cyber-border::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: conic-gradient(from 0deg, #ff44cc, #5500ff, #44ccff, #ff44cc);
+        animation: spin 6s linear infinite;
+        z-index: -2;
+    }
+
+    .cyber-border::after {
+        content: '';
+        position: absolute;
+        inset: 2px;
+        background-color: rgba(0, 0, 0, 0.9);
+        border-radius: 0.625rem;
+        z-index: -1;
+    }
+
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    
+}
