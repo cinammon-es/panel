@@ -28,7 +28,7 @@ const footerNavItems: NavItem[] = [
     },
     {
         title: 'Documentation',
-        href: 'https://cinammn.net/docs/panel',
+        href: 'https://cinammon.net/docs/panel',
         icon: BookOpen,
     },
 ];
