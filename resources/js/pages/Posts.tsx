@@ -11,9 +11,9 @@ export default function Posts() {
     const { posts } = usePage<{ posts: { id: number; title: string; content: string; picture?: string }[] }>().props;
 
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [selectedPost, setSelectedPost] = useState(null);
+    const [selectedPost, setSelectedPost] = useState<{ id: number; title: string; content: string; picture?: string } | null>(null);
 
-    const openModal = (post = null) => {
+    const openModal = (post: { id: number; title: string; content: string; picture?: string } | null = null) => {
         setSelectedPost(post);
         setIsModalOpen(true);
     };
