@@ -4,29 +4,27 @@ import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { Tickets, Webhook, Radio, Database, HeartPulse, BadgeInfo, Activity, Server, Users, Egg, Settings, BookOpen, Bookmark, Folder, LayoutGrid } from 'lucide-react';
+import { Ticket, Webhook, Radio, Database, HeartPulse, BadgeInfo, Activity, Server, Users, Egg, Settings, BookOpen, Bookmark, Folder, LayoutGrid } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
-    { title: 'Dashboard', href: '/dashboard', icon: LayoutGrid, group: 'main' },
-    { title: 'Settings', href: '/settings', icon: Settings, group: 'main' },
+    { title: 'Dashboard', href: '/dashboard', icon: LayoutGrid, group: 'main', groupColor: 'text-fuchsia-400' },
+    { title: 'Settings', href: '/settings', icon: Settings, group: 'main', groupColor: 'text-fuchsia-400' },
+    { title: 'Posts', href: '/posts', icon: Bookmark, group: 'main', groupColor: 'text-fuchsia-400' },
+    { title: 'Tickets', href: '/tickets', icon: Ticket, group: 'main', groupColor: 'text-fuchsia-400' },
 
-    { title: 'Eggs', href: '/eggs', icon: Egg, group: 'servers' },
-    { title: 'Nodes', href: '/nodes', icon: Activity, group: 'servers' },
-    { title: 'Servers', href: '/servers', icon: Server, group: 'servers' },
+    { title: 'Eggs', href: '/eggs', icon: Egg, group: 'servers', groupColor: 'text-cyan-400' },
+    { title: 'Nodes', href: '/nodes', icon: Activity, group: 'servers', groupColor: 'text-cyan-400' },
+    { title: 'Servers', href: '/servers', icon: Server, group: 'servers', groupColor: 'text-cyan-400' },
 
-    { title: 'Roles', href: '/roles', icon: BadgeInfo, group: 'users' },
-    { title: 'Users', href: '/users', icon: Users, group: 'users' },
+    { title: 'Roles', href: '/roles', icon: BadgeInfo, group: 'users', groupColor: 'text-pink-400' },
+    { title: 'Users', href: '/users', icon: Users, group: 'users', groupColor: 'text-pink-400' },
 
-    { title: 'Health', href: '/health', icon: HeartPulse, group: 'advanced' },
-    { title: 'Database Host', href: '/database', icon: Database, group: 'advanced' },
-    { title: 'Mounts', href: '/mounts', icon: Radio, group: 'advanced' },
-    { title: 'Webhooks', href: '/webhooks', icon: Webhook, group: 'advanced' },
-
-    { title: 'Posts', href: '/posts', icon: Bookmark, group: 'main' },
-    { title: 'Tickets', href: '/tickets', icon: Tickets, group: 'main' },
+    { title: 'Health', href: '/health', icon: HeartPulse, group: 'advanced', groupColor: 'text-orange-400' },
+    { title: 'Database Host', href: '/database', icon: Database, group: 'advanced', groupColor: 'text-orange-400' },
+    { title: 'Mounts', href: '/mounts', icon: Radio, group: 'advanced', groupColor: 'text-orange-400' },
+    { title: 'Webhooks', href: '/webhooks', icon: Webhook, group: 'advanced', groupColor: 'text-orange-400' },
 ];
-
 
 const footerNavItems: NavItem[] = [
     {
