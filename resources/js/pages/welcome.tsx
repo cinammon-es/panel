@@ -1,8 +1,8 @@
 import { type SharedData } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
 import aos from 'aos';
-import 'aos/dist/aos.js';
 import 'aos/dist/aos.css';
+import 'aos/dist/aos.js';
 import { useEffect } from 'react';
 
 export default function WelcomePanel() {
@@ -232,61 +232,6 @@ export default function WelcomePanel() {
                         animation: slide-x 20s linear infinite;
                     }
                 `}</style>
-
-                <footer className="w-full border-t border-neutral-700 bg-neutral-900 text-neutral-300">
-                    <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-6 py-10 text-sm sm:grid-cols-3">
-                        <div className="flex flex-col items-start gap-4">
-                            <img src="/favicon.ico" alt="Logo Cinammon" className="h-12 w-auto" draggable={false} />
-                            <p className="leading-relaxed text-neutral-400">
-                                cinammon.net es una plataforma de gestión moderna para redes y comunidades digitales.
-                            </p>
-                        </div>
-                        <div className="flex flex-col gap-2">
-                            <h3 className="mb-1 font-semibold text-white">Secciones</h3>
-                            <Link href={route('home')} className="hover:text-white hover:underline">
-                                Inicio
-                            </Link>
-                            <Link href={route('dashboard')} className="hover:text-white hover:underline">
-                                Panel
-                            </Link>
-                            <Link href={route('register')} className="hover:text-white hover:underline">
-                                Registro
-                            </Link>
-                            <Link href={route('login')} className="hover:text-white hover:underline">
-                                Acceso
-                            </Link>
-                        </div>
-                        <div className="flex flex-col gap-2">
-                            <h3 className="mb-1 font-semibold text-white">Información</h3>
-                            <a href="mailto:soporte@cinammon.net" className="hover:text-white hover:underline">
-                                Contacto
-                            </a>
-                            <a href="/politica-privacidad" className="hover:text-white hover:underline">
-                                Política de privacidad
-                            </a>
-                            <a href="/terminos-condiciones" className="hover:text-white hover:underline">
-                                Términos y condiciones
-                            </a>
-                        </div>
-                    </div>
-                    <div className="border-t border-neutral-700 px-6 py-4 text-center text-xs text-neutral-500">
-                        © {new Date().getFullYear()} cinammon.net — Todos los derechos reservados.
-                    </div>
-                </footer>
-
-                {/* BOTÓN FLOTANTE A DISCORD */}
-
-                <a href="https://discord.gg/tuservidor" target="_blank" data-aos="fade-left">
-                    <img src="https://img.icons8.com/?size=100&id=30998&format=png&color=ffffff" alt="Discord" className="h-8 w-8" />
-                </a>
-                <a
-                    href="https://youtube.com/cinammon"
-                    target="_blank"
-                    className="fixed bottom-6 left-6 z-50 rounded-full bg-[#5865F2] p-3 shadow-lg transition hover:scale-110"
-                    data-aos="fade-left"
-                >
-                    <img src="https://img.icons8.com/?size=100&id=30998&format=png&color=ffffff" alt="Discord" className="h-8 w-8" />
-                </a>
                 {/* FLECHA PARA SUBIR */}
                 <a href="#top" className="fixed right-6 bottom-6 z-50 animate-bounce p-7 transition hover:opacity-90">
                     <img
@@ -297,6 +242,56 @@ export default function WelcomePanel() {
                     />
                 </a>
             </div>
+
+            {/* FOOTER */}
+            <footer className="w-full border-t border-neutral-700 bg-neutral-900 text-neutral-300">
+                <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-6 py-10 text-sm sm:grid-cols-3">
+                    <div className="flex flex-col items-start gap-4">
+                        <img src="/favicon.ico" alt="Logo Cinammon" className="h-12 w-auto" draggable={false} />
+                        <p className="leading-relaxed text-neutral-400">
+                            cinammon.net es una plataforma de gestión moderna para redes y comunidades digitales.
+                        </p>
+                    </div>
+                    <div className="flex flex-col gap-2">
+                        <h3 className="mb-1 font-semibold text-white">Secciones</h3>
+                        <Link href={route('home')} className="hover:text-white hover:underline">
+                            Inicio
+                        </Link>
+                        <Link href={route('dashboard')} className="hover:text-white hover:underline">
+                            Panel
+                        </Link>
+                        <Link href={route('register')} className="hover:text-white hover:underline">
+                            Registro
+                        </Link>
+                        <Link href={route('login')} className="hover:text-white hover:underline">
+                            Acceso
+                        </Link>
+                    </div>
+                    <div className="flex flex-col gap-2">
+                        <h3 className="mb-1 font-semibold text-white">Información</h3>
+                        <a href="mailto:soporte@cinammon.net" className="hover:text-white hover:underline">
+                            Contacto
+                        </a>
+                        <a href="/politica-privacidad" className="hover:text-white hover:underline">
+                            Política de privacidad
+                        </a>
+                        <a href="/terminos-condiciones" className="hover:text-white hover:underline">
+                            Términos y condiciones
+                        </a>
+                    </div>
+                </div>
+                <div className="border-t border-neutral-700 px-6 py-4 text-center text-xs text-neutral-500">
+                    © {new Date().getFullYear()} cinammon.net — Todos los derechos reservados.
+                </div>
+                <a
+                    href="https://discord.gg/8J6Y3k4"
+                    target="_blank"
+                    className="fixed bottom-6 left-6 z-50 rounded-full bg-[#5865F2] p-3 shadow-lg transition hover:scale-110"
+                    data-aos="fade-left"
+                >
+                    <img src="https://img.icons8.com/?size=100&id=30998&format=png&color=ffffff" alt="Discord" className="h-8 w-8" />
+                </a>
+            </footer>
         </>
     );
 }
