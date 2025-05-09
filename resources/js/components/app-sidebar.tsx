@@ -4,38 +4,41 @@ import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { Ticket, Webhook, Radio, Database, HeartPulse, BadgeInfo, Activity, Server, Users, Egg, Settings, BookOpen, Bookmark, Folder, LayoutGrid } from 'lucide-react';
+import { FileMusic, KeyRound, Ticket, Webhook, Radio, Database, HeartPulse, BadgeInfo, Activity, Server, Users, Egg, Settings, BookOpenCheck, Bookmark, FolderGit2, LayoutGrid } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
-    { title: 'Dashboard', href: '/dashboard', icon: LayoutGrid, group: 'main', groupColor: 'text-fuchsia-400' },
-    { title: 'Settings', href: '/settings', icon: Settings, group: 'main', groupColor: 'text-fuchsia-400' },
-    { title: 'Posts', href: '/posts', icon: Bookmark, group: 'main', groupColor: 'text-fuchsia-400' },
-    { title: 'Tickets', href: '/tickets', icon: Ticket, group: 'main', groupColor: 'text-fuchsia-400' },
+    { title: 'Dashboard', href: '/dashboard', icon: LayoutGrid, group: 'main', groupColor: 'text-purple-400' },
+    { title: 'Settings', href: '/settings', icon: Settings, group: 'main', groupColor: 'text-purple-400' },
 
-    { title: 'Eggs', href: '/eggs', icon: Egg, group: 'servers', groupColor: 'text-cyan-400' },
-    { title: 'Nodes', href: '/nodes', icon: Activity, group: 'servers', groupColor: 'text-cyan-400' },
-    { title: 'Servers', href: '/servers', icon: Server, group: 'servers', groupColor: 'text-cyan-400' },
+    { title: 'Eggs', href: '/eggs', icon: Egg, group: 'servers', groupColor: 'text-blue-400' },
+    { title: 'Nodes', href: '/nodes', icon: Activity, group: 'servers', groupColor: 'text-blue-400' },
+    { title: 'Servers', href: '/servers', icon: Server, group: 'servers', groupColor: 'text-blue-400' },
 
     { title: 'Roles', href: '/roles', icon: BadgeInfo, group: 'users', groupColor: 'text-pink-400' },
     { title: 'Users', href: '/users', icon: Users, group: 'users', groupColor: 'text-pink-400' },
 
     { title: 'Health', href: '/health', icon: HeartPulse, group: 'advanced', groupColor: 'text-orange-400' },
+    { title: 'API Keys', href: '/api-keys', icon: KeyRound, group: 'advanced', groupColor: 'text-orange-400' },
     { title: 'Database Host', href: '/database', icon: Database, group: 'advanced', groupColor: 'text-orange-400' },
     { title: 'Mounts', href: '/mounts', icon: Radio, group: 'advanced', groupColor: 'text-orange-400' },
     { title: 'Webhooks', href: '/webhooks', icon: Webhook, group: 'advanced', groupColor: 'text-orange-400' },
+
+    { title: 'Posts', href: '/posts', icon: Bookmark, group: 'extra', groupColor: 'text-yellow-400' },
+    { title: 'Tickets', href: '/tickets', icon: Ticket, group: 'extra', groupColor: 'text-yellow-400' },
+    { title: 'Music', href: '/music', icon: FileMusic, group: 'extra', groupColor: 'text-yellow-400' },
 ];
 
 const footerNavItems: NavItem[] = [
     {
         title: 'Repository',
         href: 'https://github.com/cinammon-es/panel',
-        icon: Folder,
+        icon: FolderGit2,
     },
     {
         title: 'Documentation',
         href: 'https://cinammon.net/docs/panel',
-        icon: BookOpen,
+        icon: BookOpenCheck,
     },
 ];
 

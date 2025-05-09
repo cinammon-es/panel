@@ -18,7 +18,7 @@ export default function Dashboard() {
                     {[1, 2, 3].map((_, i) => (
                         <div
                             key={i}
-                            className="group relative aspect-video overflow-hidden rounded-xl border border-pink-500/20 bg-black/70 shadow-lg transition-all duration-300 hover:border-pink-500 hover:shadow-pink-500/20"
+                            className="group relative aspect-video overflow-hidden rounded-xl border border-pink-500/20 shadow-lg transition-all duration-300 hover:border-pink-500 hover:shadow-pink-500/20"
                         >
                             <div className="absolute inset-0 z-0 bg-[conic-gradient(from_0deg,#ff44cc33,#5500ff33,#44ccff33,#ff44cc33)] opacity-0 blur-sm transition-opacity duration-500 group-hover:opacity-10" />
                             <PlaceholderPattern className="absolute inset-0 size-full stroke-white/10" />
@@ -26,7 +26,7 @@ export default function Dashboard() {
                     ))}
                 </div>
 
-                <div className="relative z-10 min-h-[40vh] w-full flex-1 overflow-hidden rounded-xl border border-pink-500/20 bg-black/70 shadow-lg transition-all hover:border-pink-500 hover:shadow-pink-500/20">
+                <div className="relative z-10 min-h-[40vh] w-full flex-1 overflow-hidden rounded-xl border border-pink-500/20  shadow-lg transition-all hover:border-pink-500 hover:shadow-pink-500/20">
                     <div className="absolute inset-0 z-0 bg-[conic-gradient(from_0deg,#ff44cc33,#5500ff33,#44ccff33,#ff44cc33)] opacity-0 blur-sm transition-opacity duration-500 hover:opacity-10" />
                     <PlaceholderPattern className="absolute inset-0 size-full stroke-white/10" />
                 </div>

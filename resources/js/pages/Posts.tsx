@@ -1,8 +1,12 @@
 import AppLayout from '@/layouts/app-layout';
 import { Head, router, usePage } from '@inertiajs/react';
 import { useState } from 'react';
+import { type BreadcrumbItem } from '@/types';
 import PostFormModal from '@/components/PostFormModal';
 import { Toaster, toast } from "sonner";
+
+const breadcrumbs: BreadcrumbItem[] = [{ title: 'Posts', href: '/posts' }];
+
 export default function Posts() {
     const { posts } = usePage<{ posts: { id: number; title: string; content: string; picture?: string }[] }>().props;
 
@@ -28,10 +32,11 @@ export default function Posts() {
     };
 
     return (
-        <AppLayout>
+        <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Posts" />
+
             <Toaster position="top-center" richColors closeButton={false} expand={false} />
-            <div className="flex flex-col gap-6 rounded-lg bg-white p-6 text-black shadow-lg">
+            <div className="flex flex-col gap-6 rounded-lg p-6 text-black shadow-lg">
                 <div className="flex justify-end">
                     <button onClick={() => openModal()} className="mt-4 rounded bg-pink-500 px-4 py-2 text-white">
                         Add New Post
