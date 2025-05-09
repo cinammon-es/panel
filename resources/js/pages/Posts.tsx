@@ -1,9 +1,9 @@
-import AppLayout from '@/layouts/app-layout';
-import { Head, router, usePage } from '@inertiajs/react';
 import { useState } from 'react';
+import { Toaster, toast } from "sonner";
+import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import PostFormModal from '@/components/PostFormModal';
-import { Toaster, toast } from "sonner";
+import { Head, router, usePage } from '@inertiajs/react';
 
 const breadcrumbs: BreadcrumbItem[] = [{ title: 'Posts', href: '/posts' }];
 

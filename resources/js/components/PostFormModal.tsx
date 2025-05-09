@@ -1,6 +1,6 @@
 import { router } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
-import { Toaster, toast } from 'sonner';
+import { toast } from 'sonner';
 
 interface Post {
     id?: number;
