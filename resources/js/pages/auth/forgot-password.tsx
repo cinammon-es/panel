@@ -1,4 +1,4 @@
-import { Head, useForm } from '@inertiajs/react';
+import { Head, useForm, Link } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
 import { FormEventHandler, ReactNode } from 'react';
 
@@ -18,7 +18,9 @@ function AuthLayout({ description, children }: { title: string; description?: st
                 <div className="absolute inset-1 z-[-1] rounded-[0.625rem] bg-black/90" />
                 <div className="mb-6 text-center">
                     <div className="mb-4 flex justify-center">
-                        <img src="favicon.ico" alt="Cinammon.net Logo" className="h-20 sm:h-22" draggable={false} />
+                        <Link href="/">
+                            <img src="favicon.ico" alt="Cinammon.net Logo" className="h-20 transition hover:opacity-80 sm:h-22" draggable={false} />
+                        </Link>
                     </div>
                     <h1 className="text-3xl font-bold tracking-wide text-pink-400">¿Olvidaste contraseña?</h1>
                     {description && <p className="mt-2 text-sm text-pink-200">{description}</p>}
