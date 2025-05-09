@@ -1,6 +1,7 @@
 import { type SharedData } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
-import AOS from 'aos';
+import aos from 'aos';
+import 'aos/dist/aos.js';
 import 'aos/dist/aos.css';
 import { useEffect } from 'react';
 
@@ -8,7 +9,7 @@ export default function WelcomePanel() {
     const { auth } = usePage<SharedData>().props;
 
     useEffect(() => {
-        AOS.init({
+        aos.init({
             duration: 800,
             once: false,
             easing: 'ease-out',
