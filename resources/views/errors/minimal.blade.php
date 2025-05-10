@@ -2,9 +2,13 @@
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@yield('title', 'Error | Algo salió mal')</title>
+
+    <!-- Fuente Orbitron -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&display=swap" rel="stylesheet" />
+
     <style>
         * {
             margin: 0;
@@ -17,110 +21,130 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #121212;
+            background-color: #0a0a0a;
             color: #ffffff;
-            font-family: 'Arial', sans-serif;
+            font-family: 'Orbitron', sans-serif;
             text-align: center;
         }
 
         .error-container {
-            max-width: 600px;
-            padding: 20px;
+            max-width: 650px;
+            padding: 30px;
+            border: 1px solid #c084fc44;
+            border-radius: 12px;
+            background: linear-gradient(145deg, #141414, #1a1a1a);
+            box-shadow: 0 0 30px #c084fc33;
+            animation: fadeIn 1s ease-in-out;
         }
 
         h1 {
-            font-size: 100px;
-            font-weight: bold;
+            font-size: 90px;
+            font-weight: 800;
+            color: #ff3cac;
+            letter-spacing: 4px;
             animation: glitch 1s infinite alternate;
-            color: #e74c3c;
+            text-shadow: 0 0 10px #ff3cac99;
+        }
+
+        h3 {
+            font-size: 20px;
+            color: #eeeeee;
+            margin-top: 8px;
+            text-shadow: 0 0 5px #8a2be2;
+        }
+
+        p {
+            font-size: 20px;
+            color: #ff8800;
+            font-weight: bold;
+            text-shadow: 1px 1px 10px rgba(255, 136, 0, 0.7), -1px -1px 10px rgba(255, 136, 0, 0.7);
+            margin: 20px 0;
+            font-style: italic;
+            animation: pulse 2s infinite alternate;
+        }
+
+        .error-code {
+            font-size: 18px;
+            font-weight: bold;
+            color: #f1c40f;
+            text-shadow: 0 0 6px #f1c40f99;
+        }
+
+        a {
+            text-decoration: none;
+            padding: 12px 26px;
+            background-color: #00bcd4;
+            color: #000;
+            border-radius: 6px;
+            font-weight: bold;
+            box-shadow: 0 0 15px #00bcd499;
+            transition: all 0.3s ease-in-out;
+        }
+
+        a:hover {
+            background-color: #00acc1;
+            color: #fff;
+            box-shadow: 0 0 25px #00e5ff;
         }
 
         @keyframes glitch {
             0% {
-                text-shadow: 2px 2px #ff4757;
+                text-shadow: 2px 0 #ff00c8, -2px 0 #00ffe1;
             }
 
             100% {
-                text-shadow: -2px -2px #ff6b81;
+                text-shadow: -2px 0 #ff00c8, 2px 0 #00ffe1;
             }
-        }
-
-        /* Nuevo estilo llamativo para los párrafos <p> */
-        p {
-            font-size: 24px;
-            /* Aumentamos el tamaño de fuente */
-            color: #ff4500;
-            /* Un color rojo anaranjado más intenso */
-            font-weight: bold;
-            /* Negrita para mayor énfasis */
-            text-shadow: 2px 2px 10px rgba(255, 69, 0, 0.8), -2px -2px 10px rgba(255, 69, 0, 0.8);
-            /* Sombra de texto */
-            margin: 20px 0 30px;
-            /* Márgenes más grandes para espacio */
-            font-style: italic;
-            /* Estilo de fuente en cursiva */
-            animation: pulse 2s infinite alternate;
-            /* Animación pulsante */
         }
 
         @keyframes pulse {
             0% {
                 transform: scale(1);
-                opacity: 0.9;
+                opacity: 0.85;
             }
 
             50% {
-                transform: scale(1.1);
+                transform: scale(1.05);
                 opacity: 1;
             }
 
             100% {
                 transform: scale(1);
-                opacity: 0.9;
+                opacity: 0.85;
             }
         }
 
-        .error-code {
-            font-size: 22px;
-            font-weight: bold;
-            color: #f1c40f;
-        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
 
-        a {
-            text-decoration: none;
-            padding: 10px 20px;
-            background-color: #3498db;
-            color: #fff;
-            border-radius: 5px;
-            transition: 0.3s;
-            display: inline-block;
-            margin-top: 15px;
-        }
-
-        a:hover {
-            background-color: #2980b9;
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
 
 <body>
     <div class="error-container">
-        <h1>'¡Oops!'</h1> <br>
-        <h3> Algo salió mal. No podemos encontrar la página que buscas.</h3>
-        <p id="error-message">@yield('message')</p>
-        <p class="error-code" id="error-code">Error: @yield('code', 'XXX')</p>
-        <p id="dynamic-link"></p>
+        <h1>¡Oops!</h1>
+        <h3>Algo salió mal. No podemos encontrar la página que buscas.</h3>
+
+        <p>
+            El enlace <span style="color:#00e0ff">{{ request()->url() }}</span> no existe o fue eliminado.
+        </p>
+
+        @hasSection('message')
+        <p>@yield('message')</p>
+        @endif
+
+        <p class="error-code">Error: @yield('code', 'XXX')</p>
+
         <a href="/">Volver al inicio</a>
     </div>
-
-    <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        const errorCode = urlParams.get('code');
-
-        const errorUrl = window.location.href;
-
-        document.getElementById("error-message").innerText = `The link ${errorUrl} @yield('message')`;
-    </script>
 </body>
 
 </html>

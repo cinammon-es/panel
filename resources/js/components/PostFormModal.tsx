@@ -54,6 +54,7 @@ export default function PostFormModal({ isOpen, closeModal, post }: Props) {
         }
         const successMessage = post ? 'Post updated successfully!' : 'Post created successfully!';
         const errorMessage = post ? 'Error updating post!' : 'Error creating post!';
+
         if (post?.id) {
             data.append('_method', 'PUT');
             router.post(`/posts/${post.id}`, data, {
@@ -62,9 +63,8 @@ export default function PostFormModal({ isOpen, closeModal, post }: Props) {
                     closeModal();
                     router.reload();
                 },
-                onError: (error) => {
+                onError: () => {
                     toast.error(errorMessage);
-                    console.error(error.message || 'Failed to submit form');
                 },
             });
         } else {
@@ -74,9 +74,8 @@ export default function PostFormModal({ isOpen, closeModal, post }: Props) {
                     closeModal();
                     router.reload();
                 },
-                onError: (error) => {
+                onError: () => {
                     toast.error(errorMessage);
-                    console.error(error.message || 'Failed to submit form');
                 },
             });
         }
@@ -85,49 +84,56 @@ export default function PostFormModal({ isOpen, closeModal, post }: Props) {
     if (!isOpen) return null;
 
     return (
-        <div className="bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center bg-black">
-            <div className="w-full max-w-xl rounded-lg bg-white p-6 text-black shadow-lg">
-                <h2 className="mb-4 text-lg font-semibold">{post ? 'Edit Post' : 'Add Post'}</h2>
+        <div className="bg-opacity-60 fixed inset-0 z-50 flex items-center justify-center bg-black font-[Orbitron]">
+            <div className="w-full max-w-xl rounded-lg border border-purple-600 bg-neutral-900 p-6 text-white shadow-[0_0_20px_#c084fc66]">
+                <h2 className="mb-4 text-lg font-bold text-purple-300">{post ? 'Edit Post' : 'Create New Post'}</h2>
                 <form onSubmit={handleSubmit} encType="multipart/form-data">
-                    <div className="mb-3">
-                        <label className="block text-sm font-medium">Title</label>
+                    <div className="mb-4">
+                        <label className="block text-sm text-purple-400">Title</label>
                         <input
                             type="text"
                             name="title"
                             value={formData.title}
                             onChange={handleChange}
-                            className="w-full rounded border p-2"
                             required
+                            className="w-full rounded border border-purple-700 bg-black px-3 py-2 text-sm text-white shadow-[0_0_6px_#c084fc66] placeholder:text-purple-500 focus:ring-1 focus:ring-purple-500 focus:outline-none"
                         />
                     </div>
-                    <div className="mb-3">
-                        <label className="block text-sm font-medium" htmlFor="content">
-                            Content
-                        </label>
+                    <div className="mb-4">
+                        <label className="block text-sm text-purple-400">Content</label>
                         <textarea
                             name="content"
                             value={formData.content}
                             onChange={handleChange}
-                            className="w-full rounded border p-2"
                             required
-                        ></textarea>
+                            className="w-full rounded border border-purple-700 bg-black px-3 py-2 text-sm text-white shadow-[0_0_6px_#c084fc66] placeholder:text-purple-500 focus:ring-1 focus:ring-purple-500 focus:outline-none"
+                        />
                     </div>
-                    <div className="mb-3">
-                        <label className="block text-sm font-medium">Picture (optional)</label>
-                        <input type="file" name="picture" accept="image/*" onChange={handleFileChange} className="w-full" />
+                    <div className="mb-4">
+                        <label className="block text-sm text-purple-400">Picture (optional)</label>
+                        <input type="file" name="picture" accept="image/*" onChange={handleFileChange} className="w-full text-purple-300" />
                     </div>
+
                     {preview && (
-                        <div className="mb-3">
-                            <p className="mb-1 text-sm">Image Preview:</p>
-                            <img src={preview} alt="Preview" className="w-full" />
+                        <div className="mb-4">
+                            <p className="mb-1 text-sm text-purple-400">Preview:</p>
+                            <img src={preview} alt="Preview" className="w-full rounded border border-purple-500 shadow" />
                         </div>
                     )}
-                    <div className="mt-4 flex justify-end gap-2">
-                        <button type="button" onClick={closeModal} className="mr-2 rounded-md bg-gray-300 px-4 py-2 text-black">
+
+                    <div className="mt-6 flex justify-end gap-3">
+                        <button
+                            type="button"
+                            onClick={closeModal}
+                            className="rounded border border-gray-500 bg-neutral-800 px-4 py-2 text-sm text-gray-300 transition hover:bg-neutral-700"
+                        >
                             Cancel
                         </button>
-                        <button type="submit" className="rounded-md bg-blue-500 px-4 py-2 text-white">
-                            {post ? "Update" : "Create"}
+                        <button
+                            type="submit"
+                            className="rounded border border-purple-600 bg-purple-800 px-4 py-2 text-sm text-purple-100 shadow-[0_0_8px_#c084fc] transition hover:bg-purple-700"
+                        >
+                            {post ? 'Update' : 'Create'}
                         </button>
                     </div>
                 </form>
