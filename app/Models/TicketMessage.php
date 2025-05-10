@@ -12,8 +12,7 @@ class TicketMessage extends Model
         'message',
         'sender_name',
         'sender_avatar',
-        'reply_to_id', 
-        'audio_url',
+        'reply_to_id',
     ];
 
     // Usuario que envió el mensaje
