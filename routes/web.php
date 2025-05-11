@@ -6,6 +6,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\EggController;
 use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\NodeController;
 use Illuminate\Http\Request;
 
 Route::get('/', function () {
@@ -33,7 +34,9 @@ Route::post('/tickets/{ticket}/messages', [TicketController::class, 'storeMessag
 Route::get('/tickets/{id}/edit', [TicketController::class, 'edit'])->name('tickets.edit');
 Route::put('/tickets/{id}', [TicketController::class, 'update'])->name('tickets.update');
 Route::delete('/tickets/{ticket}/messages/{message}', [TicketController::class, 'destroyMessage'])->name('tickets.messages.destroy');
-Route::resource('eggs', EggController::class)->except(['create']);
-require __DIR__.'/settings.php';
+Route::resource('eggs', EggController::class);
+Route::resource('nodes', NodeController::class);
 
+
+require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';

@@ -122,10 +122,14 @@ export default function TicketChat() {
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title={`Chat - ${ticket.subject}`} />
+            <Head title={`Chat - ${ticket.subject}`}>
+                <link rel="preconnect" href="https://fonts.googleapis.com" />
+                <link rel="preconnect" href="https://fonts.gstatic.com" />
+                <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&display=swap" rel="stylesheet" />
+            </Head>
             <Toaster position="top-center" />
 
-            <div className="flex h-[80vh] gap-4 pt-4 pr-6 pl-6">
+            <div className="flex h-[80vh] gap-4 pt-4 pr-6 pl-6 font-[Orbitron]">
                 <aside className="w-1/3 max-w-xs overflow-y-auto rounded-lg bg-[#1e1e1e] p-4 text-white shadow-md">
                     <h2 className="mb-4 text-lg font-semibold">Chats recientes</h2>
                     {recentTickets.length === 0 ? (
@@ -176,7 +180,7 @@ export default function TicketChat() {
                 </aside>
 
                 {/* Panel de chat actual */}
-                <main className="flex flex-1 flex-col rounded-lg bg-[#1f1f1f] p-6 text-white shadow-md">
+                <main className="flex flex-1 flex-col rounded-lg bg-[#1f1f1f] p-6 text-white shadow-md dark:bg-[#333]">
                     {/* Cabecera */}
                     <div className="flex items-center justify-between border-b border-[#333] pb-4">
                         <div className="flex items-center gap-4">

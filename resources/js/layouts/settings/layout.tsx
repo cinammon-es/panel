@@ -21,9 +21,9 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
             <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&display=swap" rel="stylesheet" />
             <div className="min-h-screen bg-white px-4 py-6 font-[Orbitron] text-black transition-colors dark:bg-black dark:text-white">
                 <Heading
-                    title="Settings"
+                    title="SETTINGS"
                     description="Manage your profile and account settings"
-                    className="text-purple-700 drop-shadow-none dark:text-purple-300 dark:drop-shadow-[0_0_6px_#c084fc]"
+                    className="text-purple-700 drop-shadow-none dark:text-purple-400 dark:drop-shadow-[0_0_6px_#c084fc]"
                 />
 
                 <div className="mt-8 flex flex-col space-y-8 lg:flex-row lg:space-y-0 lg:space-x-12">
