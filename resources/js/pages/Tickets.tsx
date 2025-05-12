@@ -10,6 +10,7 @@ const breadcrumbs: BreadcrumbItem[] = [{ title: 'Tickets', href: '/tickets' }];
 type Ticket = {
     id: number;
     subject: string;
+    message: string;
     status: 'open' | 'pending' | 'closed';
 };
 
@@ -58,7 +59,7 @@ export default function Tickets() {
                     <table className="min-w-full table-auto text-sm">
                         <thead className="bg-purple-100 tracking-wider text-purple-700 uppercase dark:bg-purple-950 dark:text-purple-300">
                             <tr>
-                                {['ID', 'Asunto', 'Estado', 'Acciones'].map((header) => (
+                                {['ID', 'Asunto', 'Mensaje', 'Estado', 'Acciones'].map((header) => (
                                     <th key={header} className="px-4 py-3 text-left">
                                         {header}
                                     </th>
@@ -74,6 +75,9 @@ export default function Tickets() {
                                     >
                                         <td className="px-4 py-2 font-medium text-purple-700 dark:text-purple-100">{ticket.id}</td>
                                         <td className="px-4 py-2 text-purple-800 dark:text-purple-200">{ticket.subject}</td>
+                                        <td className="line-clamp-2 max-w-xs px-4 py-2 text-purple-800 dark:text-purple-200">
+                                            {ticket.message || '—'}
+                                        </td>
                                         <td className="px-4 py-2 text-purple-600 capitalize dark:text-purple-300">{ticket.status}</td>
                                         <td className="flex flex-wrap gap-2 px-4 py-2">
                                             <button
@@ -99,7 +103,7 @@ export default function Tickets() {
                                 ))
                             ) : (
                                 <tr>
-                                    <td colSpan={4} className="px-4 py-6 text-center text-purple-500 dark:text-purple-400">
+                                    <td colSpan={5} className="px-4 py-6 text-center text-purple-500 dark:text-purple-400">
                                         No hay tickets disponibles.
                                     </td>
                                 </tr>
