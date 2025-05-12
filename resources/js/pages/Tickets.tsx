@@ -52,13 +52,6 @@ export default function Tickets() {
                     >
                         + Crear Ticket
                     </button>
-
-                    <button
-                        onClick={() => router.get('/tickets')}
-                        className="rounded border border-green-400 bg-green-100/50 px-4 py-2 text-sm text-green-800 shadow-none transition hover:bg-green-200/70 dark:border-green-500 dark:bg-green-900/30 dark:text-green-300 dark:shadow-[0_0_6px_#22c55e] dark:hover:bg-green-700/50"
-                    >
-                        Actualizar
-                    </button>
                 </div>
 
                 {/* Tabla */}
