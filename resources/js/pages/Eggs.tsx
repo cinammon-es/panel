@@ -1,9 +1,55 @@
 import AppLayout from '@/layouts/app-layout';
-import { Head, router } from '@inertiajs/react';
+import { Head, router, usePage } from '@inertiajs/react';
+import { ChevronDown, ChevronUp, Copy, Egg, Pencil, Server, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 
+interface Egg {
+    id: number;
+    uuid: string;
+    name: string;
+    author: string;
+    description: string;
+    servers: number;
+}
+
+interface Pagination<T> {
+    data: T[];
+    links: {
+        url: string | null;
+        label: string;
+        active: boolean;
+    }[];
+    from: number;
+    to: number;
+    total: number;
+    per_page: number;
+}
+
 export default function Eggs() {
-    const [search, setSearch] = useState('');
+    const { eggs, filters } = usePage<{
+        eggs: Pagination<Egg>;
+        filters: { search?: string; sort?: string; direction?: string; per_page?: number };
+    }>().props;
+
+    const [search, setSearch] = useState(filters.search || '');
+
+    const handleSearch = (e: React.FormEvent) => {
+        e.preventDefault();
+        router.get(
+            '/eggs',
+            { search, sort: filters.sort, direction: filters.direction, per_page: filters.per_page },
+            { preserveScroll: true, preserveState: true },
+        );
+    };
+
+    const handleSort = () => {
+        const newDirection = filters.direction === 'asc' ? 'desc' : 'asc';
+        router.get(
+            '/eggs',
+            { search, sort: 'name', direction: newDirection, per_page: filters.per_page },
+            { preserveScroll: true, preserveState: true },
+        );
+    };
 
     return (
         <AppLayout breadcrumbs={[{ title: 'Eggs', href: '/eggs' }]}>
@@ -11,96 +57,193 @@ export default function Eggs() {
                 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&display=swap" rel="stylesheet" />
             </Head>
 
-            <div className="min-h-screen bg-white p-6 font-[Orbitron] text-black transition-colors dark:bg-black dark:text-white">
+            <div className="min-h-screen bg-black p-6 font-[Orbitron] text-white transition-colors">
                 {/* Header */}
-                <div className="mb-6 flex items-center justify-between border-b border-cyan-500 pb-4 dark:border-cyan-600">
-                    <h1 className="text-3xl font-semibold tracking-widest text-cyan-800 drop-shadow-none dark:text-cyan-400 dark:drop-shadow-[0_0_5px_#0ff]">
-                        EGGS
-                    </h1>
+                <div className="mb-6 flex items-center justify-between border-b border-cyan-600 pb-4">
+                    <h1 className="text-3xl font-semibold tracking-widest text-cyan-400 drop-shadow-[0_0_5px_#0ff]">EGGS</h1>
                     <div className="flex gap-2">
                         <button
                             onClick={() => alert('Import')}
-                            className="rounded border border-cyan-400 bg-cyan-100/50 px-4 py-1.5 text-sm text-cyan-800 transition hover:bg-cyan-200/70 dark:border-cyan-500 dark:bg-cyan-900/30 dark:text-cyan-300 dark:hover:bg-cyan-700/50"
+                            className="rounded border border-cyan-500 bg-cyan-900/30 px-4 py-1.5 text-sm text-cyan-300 transition hover:bg-cyan-700/50"
                         >
                             Import
                         </button>
                         <button
                             onClick={() => router.visit('/eggs/create')}
-                            className="rounded border border-purple-400 bg-purple-100/50 px-4 py-1.5 text-sm text-purple-800 transition hover:bg-purple-200/70 dark:border-purple-500 dark:bg-purple-900/30 dark:text-purple-300 dark:hover:bg-purple-700/50"
+                            className="rounded border border-purple-500 bg-purple-900/30 px-4 py-1.5 text-sm text-purple-300 transition hover:bg-purple-700/50"
                         >
                             New Egg
                         </button>
                     </div>
                 </div>
 
-                {/* Search + Filter */}
-                <div className="mb-6 flex items-center gap-2">
+                {/* Search */}
+                <form onSubmit={handleSearch} className="mb-6 flex items-center gap-2">
                     <div className="relative flex-1">
                         <input
                             type="text"
                             placeholder="Search eggs..."
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
-                            className="w-full rounded border border-cyan-300 bg-white px-3 py-2 pl-10 text-sm text-cyan-800 shadow-none placeholder:text-cyan-500 dark:border-cyan-700 dark:bg-black dark:text-cyan-200 dark:shadow-[0_0_5px_#0ff] dark:placeholder:text-cyan-600"
+                            className="w-full rounded border border-cyan-700 bg-black px-3 py-2 pl-10 text-sm text-cyan-200 shadow-[0_0_5px_#0ff] placeholder:text-cyan-600"
                         />
-                        <span className="absolute top-1/2 left-3 -translate-y-1/2 text-cyan-500 dark:text-cyan-600">
+                        <span className="absolute top-1/2 left-3 -translate-y-1/2 text-cyan-600">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m0 0A7 7 0 103 10a7 7 0 0012 5z" />
                             </svg>
                         </span>
                     </div>
-                    <button
-                        onClick={() => alert('Open filters')}
-                        className="rounded border border-pink-400 bg-pink-100/50 px-3 py-2 text-pink-800 transition hover:bg-pink-200/70 dark:border-pink-500 dark:bg-pink-900/30 dark:text-pink-300 dark:hover:bg-pink-700/50"
-                        title="Filter"
-                    >
+                    <button type="submit" className="rounded border border-pink-500 bg-pink-900/30 px-3 py-2 text-pink-300 hover:bg-pink-700/50">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={1.5}
-                                d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707l-6.414 6.414A1 1 0 0014 13.414V18a1 1 0 01-.447.832l-4 2.5A1 1 0 018 20.5V13.414a1 1 0 00-.293-.707L1.293 6.707A1 1 0 011 6V4z"
-                            />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 4h18M6 8h12M10 12h4" />
                         </svg>
                     </button>
-                </div>
+                </form>
 
-                {/* Tabla vacía */}
-                <div className="overflow-hidden rounded-lg border border-cyan-300 bg-white shadow-none transition dark:border-cyan-700 dark:bg-neutral-950 dark:shadow-[0_0_10px_#0ff3]">
+                {/* Table */}
+                <div className="overflow-hidden rounded-lg border border-cyan-700 bg-neutral-950 shadow-[0_0_10px_#0ff3]">
                     <table className="min-w-full table-auto text-sm">
-                        <thead className="bg-cyan-100 text-cyan-700 dark:bg-cyan-950/20 dark:text-cyan-300">
+                        <thead>
                             <tr>
-                                <th className="px-4 py-2 text-left">Name</th>
-                                <th className="px-4 py-2 text-left">Description</th>
+                                <th className="px-4 py-2 text-left">
+                                    <button onClick={handleSort} className="flex items-center gap-1 text-cyan-300 hover:text-cyan-100">
+                                        Name
+                                        {filters.sort === 'name' &&
+                                            (filters.direction === 'asc' ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />)}
+                                    </button>
+                                </th>
                                 <th className="px-4 py-2 text-left">Servers</th>
                                 <th className="px-4 py-2 text-right">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td colSpan={4} className="px-4 py-6 text-center text-cyan-500 dark:text-cyan-600">
-                                    No eggs found.
-                                </td>
-                            </tr>
+                            {eggs.data.length === 0 ? (
+                                <tr>
+                                    <td colSpan={4} className="px-4 py-6 text-center text-cyan-600">
+                                        No eggs found.
+                                    </td>
+                                </tr>
+                            ) : (
+                                eggs.data.map((egg) => (
+                                    <tr
+                                        key={egg.id}
+                                        onClick={() => router.visit(`/eggs/${egg.id}/edit`)}
+                                        className="cursor-pointer border-t border-cyan-800 transition hover:bg-cyan-900/20"
+                                    >
+                                        <td className="px-4 py-4">
+                                            <div className="flex flex-col">
+                                                <span className="inline-flex items-center gap-1 font-semibold text-white">
+                                                    <Egg className="h-4 w-4 text-cyan-400" />
+                                                    {egg.name}
+                                                </span>
+                                                <span className="text-sm text-cyan-400">{egg.description}</span>
+                                            </div>
+                                        </td>
+                                        <td className="px-4 py-4 text-center">
+                                            <div className="inline-flex items-center gap-1 text-cyan-300">
+                                                <Server className="h-4 w-4" />
+                                                {egg.servers ?? 0}
+                                            </div>
+                                        </td>
+                                        <td className="px-4 py-4 text-right">
+                                            <div className="flex items-center justify-end gap-2" onClick={(e) => e.stopPropagation()}>
+                                                <button
+                                                    title="Edit"
+                                                    className="text-cyan-300 hover:text-cyan-100"
+                                                    onClick={() => router.visit(`/eggs/${egg.id}/edit`)}
+                                                >
+                                                    <Pencil className="h-4 w-4" />
+                                                </button>
+                                                <button
+                                                    title="Duplicate"
+                                                    className="text-blue-400 hover:text-blue-200"
+                                                    onClick={() => alert('Duplicate not implemented')}
+                                                >
+                                                    <Copy className="h-4 w-4" />
+                                                </button>
+                                                <button
+                                                    title="Delete"
+                                                    className="text-pink-400 hover:text-pink-200"
+                                                    onClick={() => alert('Delete not implemented')}
+                                                >
+                                                    <Trash2 className="h-4 w-4" />
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))
+                            )}
                         </tbody>
                     </table>
 
-                    {/* Per page selector */}
-                    <div className="flex items-center justify-center border-t border-cyan-300 bg-cyan-50 px-4 py-3 dark:border-cyan-700 dark:bg-neutral-950">
-                        <div className="inline-flex items-center gap-2 rounded-md border border-cyan-300 bg-white px-3 py-1.5 text-sm text-cyan-800 shadow-none dark:border-cyan-600 dark:bg-black dark:text-cyan-200 dark:shadow-[0_0_4px_#0ff]">
-                            <span className="text-cyan-600 dark:text-cyan-400">Per page</span>
+                    {/* Pagination */}
+                    {eggs.links.length > 5 && (
+                        <div className="mt-6 flex justify-center p-4">
+                            <ul className="flex flex-wrap gap-2 text-sm font-medium">
+                                {eggs.links.map((link, i) => (
+                                    <li key={i}>
+                                        <button
+                                            disabled={!link.url}
+                                            onClick={() => {
+                                                if (!link.url) return;
+                                                const url = new URL(link.url);
+                                                const page = url.searchParams.get('page');
+                                                router.get(
+                                                    '/eggs',
+                                                    {
+                                                        page,
+                                                        search,
+                                                        sort: filters.sort,
+                                                        direction: filters.direction,
+                                                        per_page: filters.per_page,
+                                                    },
+                                                    { preserveScroll: true, preserveState: true },
+                                                );
+                                            }}
+                                            dangerouslySetInnerHTML={{ __html: link.label }}
+                                            className={`rounded border px-3 py-1.5 text-xs transition ${link.active ? 'border-cyan-500 bg-cyan-500 text-white shadow-md' : 'border-cyan-700 bg-black text-cyan-400 hover:bg-cyan-800/30 hover:text-white'} ${!link.url ? 'cursor-not-allowed opacity-40' : ''}`}
+                                        />
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
+                </div>
+
+                {/* Per page selector */}
+                <div className="fi-pagination-records-per-page mt-4 flex items-center justify-between gap-2 border-t border-cyan-300 bg-cyan-50 px-4 py-3 dark:border-cyan-700 dark:bg-neutral-950">
+                    <span className="text-sm text-gray-500 dark:text-gray-400">
+                        Showing {eggs.from} to {eggs.to} of {eggs.total} results
+                    </span>
+                    <label className="flex items-center gap-2 rounded-lg bg-white/5 px-3 py-1.5 shadow-sm ring-1 ring-cyan-800 dark:bg-black dark:ring-cyan-700">
+                        <span className="font-mono text-sm text-cyan-400">Per page</span>
+                        <div className="relative">
                             <select
-                                className="bg-white text-cyan-800 outline-none dark:bg-black dark:text-cyan-200"
-                                defaultValue={25}
-                                onChange={(e) => alert(`Cambiar a ${e.target.value} por página`)}
+                                className="w-20 appearance-none rounded border border-cyan-700 bg-black px-2 py-1 font-mono text-xs text-cyan-200 outline-none focus:border-cyan-400"
+                                value={filters.per_page ?? 10}
+                                onChange={(e) => {
+                                    const perPage = parseInt(e.target.value, 10);
+                                    router.get(
+                                        '/eggs',
+                                        {
+                                            search,
+                                            sort: filters.sort,
+                                            direction: filters.direction,
+                                            per_page: perPage,
+                                        },
+                                        { preserveScroll: true, preserveState: true },
+                                    );
+                                }}
                             >
+                                <option value="5">5</option>
                                 <option value="10">10</option>
                                 <option value="25">25</option>
                                 <option value="50">50</option>
                                 <option value="100">100</option>
                             </select>
+                            <ChevronDown className="pointer-events-none absolute top-1/2 right-2 h-3 w-3 -translate-y-1/2 text-cyan-400" />
                         </div>
-                    </div>
+                    </label>
                 </div>
             </div>
         </AppLayout>
