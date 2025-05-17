@@ -25,10 +25,13 @@ interface Pagination<T> {
     per_page: number;
 }
 
+
 export default function Eggs() {
-    const { eggs, filters } = usePage<{
+    const [showFilterMenu, setShowFilterMenu] = useState(false);
+    const { eggs, filters, availableTags } = usePage<{
         eggs: Pagination<Egg>;
-        filters: { search?: string; sort?: string; direction?: string; per_page?: number };
+        filters: { search?: string; sort?: string; direction?: string; per_page?: number; tag?: string };
+        availableTags: string[];
     }>().props;
 
     const [search, setSearch] = useState(filters.search || '');
@@ -50,6 +53,24 @@ export default function Eggs() {
             { preserveScroll: true, preserveState: true },
         );
     };
+
+    const activeFilters = Object.values(filters).filter((value) => value !== undefined && value !== '').length;
+    
+    const handleTagChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const selectedTag = e.target.value;
+        router.get(
+            '/eggs',
+            {
+                search,
+                sort: filters.sort,
+                direction: filters.direction,
+                per_page: filters.per_page,
+                tag: selectedTag,
+            },
+            { preserveScroll: true, preserveState: true },
+        );
+    };
+
 
     return (
         <AppLayout breadcrumbs={[{ title: 'Eggs', href: '/eggs' }]}>
@@ -93,11 +114,52 @@ export default function Eggs() {
                             </svg>
                         </span>
                     </div>
-                    <button type="submit" className="rounded border border-pink-500 bg-pink-900/30 px-3 py-2 text-pink-300 hover:bg-pink-700/50">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 4h18M6 8h12M10 12h4" />
-                        </svg>
-                    </button>
+
+                    {/* Active filters */}
+                    <div className="relative">
+                        <button type="button" onClick={() => setShowFilterMenu(!showFilterMenu)} className="relative rounded p-3">
+                            <i className="bi bi-funnel-fill text-2xl text-cyan-300"></i>
+                            {activeFilters > 0 && (
+                                <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-pink-500 text-xs font-bold text-white shadow-md">
+                                    {activeFilters}
+                                </span>
+                            )}
+                        </button>
+
+                        {/* Filter menu */}
+                        {showFilterMenu && (
+                            <div className="absolute top-full right-0 mt-2 w-48 rounded border border-cyan-600 bg-neutral-950 shadow-[0_0_10px_#0ff3]">
+                                <div className="p-2">
+                                    <div className="mb-2 flex items-center justify-between">
+                                        <label htmlFor="search" className="block text-sm text-cyan-300">
+                                            Filters
+                                        </label>
+                                        <button>
+                                            <i className="bi bi-x-lg color-red-500 text-cyan-300" onClick={() => setShowFilterMenu(false)}></i>
+                                        </button>
+                                    </div>
+                                    <div className="mb-2">
+                                        <label htmlFor="tags" className="block text-sm font-medium text-cyan-300">
+                                            Tag
+                                        </label>
+                                        <select
+                                            id="tags"
+                                            className="mt-4 block w-full rounded border border-cyan-700 bg-black px-3 py-2 text-sm text-cyan-200 shadow-[0_0_5px_#0ff] focus:border-cyan-400 focus:ring focus:ring-cyan-400"
+                                            onChange={handleTagChange}
+                                            value={filters.tag || ''}
+                                        >
+                                            <option value="tag">Select a Tag</option>
+                                            {availableTags.map((tag) => (
+                                                <option key={tag} value={tag}>
+                                                    {tag}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
                 </form>
 
                 {/* Table */}
