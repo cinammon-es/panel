@@ -34,6 +34,10 @@ class Egg extends Model
         'tags',
     ];
 
+    protected $casts = [
+        'tags' => 'array',
+    ];
+
     public function servers(): HasMany
     {
         return $this->hasMany(Server::class, 'egg_id');
