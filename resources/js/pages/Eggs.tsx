@@ -1,6 +1,6 @@
 import AppLayout from '@/layouts/app-layout';
 import { Head, router, usePage } from '@inertiajs/react';
-import { ChevronDown, ChevronUp, Copy, Egg, Pencil, Server, Trash2 } from 'lucide-react';
+import { ChevronDown, ChevronUp, Copy, Egg, Pencil, Server, Trash2, Upload} from 'lucide-react';
 import { useState } from 'react';
 
 interface Egg {
@@ -35,6 +35,15 @@ export default function Eggs() {
     }>().props;
 
     const [search, setSearch] = useState(filters.search || '');
+    const [selectedEggs, setSelectedEggs] = useState<number[]>([]);
+    const allSelected = selectedEggs.length === eggs.data.length && eggs.data.length > 0;
+    const activeFilters = filters.tag ? 1 : 0;
+    const [selectedTag, setSelectedTag] = useState(filters.tag || '');
+    const [tagSearch, setTagSearch] = useState('');
+    const [showDropdown, setShowDropdown] = useState(false);
+    const [showBulkMenu, setShowBulkMenu] = useState(false);
+
+
 
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();
@@ -54,10 +63,17 @@ export default function Eggs() {
         );
     };
 
-    const activeFilters = filters.tag ? 1 : 0;
-    const [selectedTag, setSelectedTag] = useState(filters.tag || '');
-    const [tagSearch, setTagSearch] = useState('');
-    const [showDropdown, setShowDropdown] = useState(false);
+    const toggleSelectAll = () => {
+        if (allSelected) {
+            setSelectedEggs([]);
+        } else {
+            setSelectedEggs(eggs.data.map((egg) => egg.id));
+        }
+    };
+
+    const toggleSelect = (id: number) => {
+        setSelectedEggs((prev) => (prev.includes(id) ? prev.filter((eggId) => eggId !== id) : [...prev, id]));
+    };
 
 
     return (
@@ -86,166 +102,237 @@ export default function Eggs() {
                     </div>
                 </div>
 
-                <div className="space-y-6 rounded-xl border border-cyan-700 bg-[#0a0a0a] p-6">
-                    {/* Search */}
-                    <form onSubmit={handleSearch} className="mb-6 flex flex-wrap items-center justify-end gap-3">
-                        <div className="relative max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg">
-                            <input
-                                type="text"
-                                placeholder="Search eggs..."
-                                value={search}
-                                onChange={(e) => setSearch(e.target.value)}
-                                className="w-full rounded border border-cyan-700 bg-black px-3 py-2 pl-10 text-sm text-cyan-200 shadow-[0_0_5px_#0ff] placeholder:text-cyan-600"
-                            />
-                            <span className="absolute top-1/2 left-3 -translate-y-1/2 text-cyan-600">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={1.5}
-                                        d="M21 21l-6-6m0 0A7 7 0 103 10a7 7 0 0012 5z"
-                                    />
-                                </svg>
-                            </span>
-                        </div>
+                <div className="rounded-xl border border-cyan-700 bg-[#0a0a0a]">
+                    {/* Search and filters */}
+                    <form onSubmit={handleSearch} className="flex w-full items-center justify-between gap-4 px-4 py-2">
+                        {/* Bulk Actions */}
+                        <div className="flex items-center gap-4">
+                            {selectedEggs.length > 0 && (
+                                <div>
+                                    <div className="relative inline-block">
+                                        <button
+                                            onClick={() => setShowBulkMenu(!showBulkMenu)}
+                                            className="flex items-center gap-2 rounded border border-cyan-500 bg-cyan-900/30 px-3 py-1.5 text-cyan-300 hover:bg-cyan-700/50"
+                                        >
+                                            Bulk actions
+                                        </button>
 
-                        {/* Active filters */}
-                        <div className="relative">
-                            <button type="button" onClick={() => setShowFilterMenu(!showFilterMenu)} className="relative rounded p-3">
-                                <i className="bi bi-funnel-fill text-2xl text-cyan-300"></i>
-                                {activeFilters > 0 && (
-                                    <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-pink-500 text-xs font-bold text-white shadow-md">
-                                        {activeFilters}
-                                    </span>
-                                )}
-                            </button>
-
-                            {/* Filter menu */}
-                            {showFilterMenu && (
-                                <div className="absolute right-0 w-72 rounded bg-neutral-950 shadow-lg">
-                                    <div className="space-y-4 p-3">
-                                        <div className="flex items-center justify-between">
-                                            <span className="text-sm font-semibold text-white">Filters</span>
-                                            <button
-                                                onClick={() => {
-                                                    setSelectedTag('');
-                                                    setTagSearch('');
-                                                    setSearch('');
-                                                    setShowDropdown(false);
-                                                    setShowFilterMenu(false);
-
-                                                    router.get(
-                                                        '/eggs',
-                                                        {
-                                                            sort: filters.sort,
-                                                            direction: filters.direction,
-                                                            per_page: filters.per_page,
-                                                            tag: '',
-                                                            search: '',
-                                                        },
-                                                        {
-                                                            preserveScroll: true,
-                                                            preserveState: false,
-                                                            replace: true, // <-- Esto fuerza que los filtros queden vacíos
-                                                        },
-                                                    );
-                                                }}
-                                                className="text-sm font-semibold text-red-400 hover:text-red-300"
-                                            >
-                                                Reset
-                                            </button>
-                                        </div>
-
-                                        <div>
-                                            <label htmlFor="tags" className="mb-3 block text-sm font-medium text-cyan-300">
-                                                Tag
-                                            </label>
-                                            <div className="relative">
-                                                <button
-                                                    onClick={() => setShowDropdown(!showDropdown)}
-                                                    className="w-full rounded border bg-black px-3 py-2 pr-10 text-left text-sm text-cyan-200"
-                                                >
-                                                    {selectedTag || 'Select an option'}
-                                                    <ChevronDown className="absolute top-1/2 right-2 h-4 w-4 -translate-y-1/2 text-cyan-400" />
-                                                </button>
-
-                                                {selectedTag && (
-                                                    <button
-                                                        onClick={() => {
-                                                            setSelectedTag('');
-                                                            setTagSearch('');
-                                                            router.get(
-                                                                '/eggs',
-                                                                {
-                                                                    ...filters,
-                                                                    tag: '',
-                                                                },
-                                                                {
-                                                                    preserveScroll: true,
-                                                                    preserveState: true,
-                                                                },
-                                                            );
-                                                        }}
-                                                        className="absolute top-1/2 right-7 -translate-y-1/2 text-cyan-400 hover:text-red-500"
-                                                        title="Clear tag"
-                                                    >
-                                                        &times;
-                                                    </button>
-                                                )}
-
-                                                {showDropdown && (
-                                                    <div className="absolute z-50 mt-1 w-full bg-black">
-                                                        <input
-                                                            type="text"
-                                                            placeholder="Start typing to search..."
-                                                            value={tagSearch}
-                                                            onChange={(e) => setTagSearch(e.target.value)}
-                                                            className="w-full border-b bg-black px-3 py-2 text-sm text-cyan-200 placeholder:text-cyan-600 focus:outline-none"
-                                                        />
-                                                        <ul className="max-h-60 overflow-y-auto">
-                                                            {availableTags
-                                                                .filter((tag) => tag.toLowerCase().includes(tagSearch.toLowerCase()))
-                                                                .map((tag) => (
-                                                                    <li
-                                                                        key={tag}
-                                                                        onClick={() => {
-                                                                            setSelectedTag(tag);
-                                                                            setShowDropdown(false);
-                                                                            router.get(
-                                                                                '/eggs',
-                                                                                {
-                                                                                    ...filters,
-                                                                                    tag,
-                                                                                },
-                                                                                {
-                                                                                    preserveScroll: true,
-                                                                                    preserveState: true,
-                                                                                },
-                                                                            );
-                                                                        }}
-                                                                        className="cursor-pointer px-3 py-2 text-sm text-cyan-200 hover:bg-cyan-800"
-                                                                    >
-                                                                        {tag}
-                                                                    </li>
-                                                                ))}
-                                                        </ul>
-                                                    </div>
-                                                )}
+                                        {showBulkMenu && (
+                                            <div className="absolute left-0 z-50 mt-2 w-51 rounded border border-cyan-700 bg-black shadow-[0_0_10px_#0ff]">
+                                                <ul className="py-1">
+                                                    <li>
+                                                        <button
+                                                            onClick={() => { 
+                                                                setShowBulkMenu(false);
+                                                            }}
+                                                            className="flex w-full items-center gap-2 px-4 py-2 text-left text-pink-400 hover:bg-pink-800/30"
+                                                        >
+                                                            <Trash2 className="h-4 w-4" />
+                                                            Delete selected
+                                                        </button>
+                                                    </li>
+                                                    <li>
+                                                        <button
+                                                            onClick={() => {
+                                                                setShowBulkMenu(false);
+                                                            }}
+                                                            className="flex w-full items-center gap-2 px-4 py-2 text-left text-green-400 hover:bg-green-800/30"
+                                                        >
+                                                            <Upload className="h-4 w-4" />
+                                                            Update selected
+                                                        </button>
+                                                    </li>
+                                                </ul>
                                             </div>
-                                        </div>
+                                        )}
                                     </div>
+
+                                    
                                 </div>
                             )}
                         </div>
+
+                        <div className="flex items-center justify-between">
+                            {/* Search input */}
+                            <div className="relative max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg">
+                                <input
+                                    type="text"
+                                    placeholder="Search eggs..."
+                                    value={search}
+                                    onChange={(e) => setSearch(e.target.value)}
+                                    className="w-full rounded border border-cyan-700 bg-black px-3 py-2 pl-10 text-sm text-cyan-200 shadow-[0_0_5px_#0ff] placeholder:text-cyan-600"
+                                />
+                                <span className="absolute top-1/2 left-3 -translate-y-1/2 text-cyan-600">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth={1.5}
+                                            d="M21 21l-6-6m0 0A7 7 0 103 10a7 7 0 0012 5z"
+                                        />
+                                    </svg>
+                                </span>
+                            </div>
+
+                            {/* Active filters */}
+                            <div className="relative">
+                                <button type="button" onClick={() => setShowFilterMenu(!showFilterMenu)} className="relative rounded p-3">
+                                    <i className="bi bi-funnel-fill text-2xl text-cyan-300"></i>
+                                    {activeFilters > 0 && (
+                                        <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-pink-500 text-xs font-bold text-white shadow-md">
+                                            {activeFilters}
+                                        </span>
+                                    )}
+                                </button>
+
+                                {/* Filter menu */}
+                                {showFilterMenu && (
+                                    <div className="absolute right-0 w-72 rounded bg-neutral-950 shadow-lg">
+                                        <div className="space-y-4 p-3">
+                                            <div className="flex items-center justify-between">
+                                                <span className="text-sm font-semibold text-white">Filters</span>
+                                                <button
+                                                    onClick={() => {
+                                                        setSelectedTag('');
+                                                        setTagSearch('');
+                                                        setSearch('');
+                                                        setShowDropdown(false);
+                                                        setShowFilterMenu(false);
+
+                                                        router.get(
+                                                            '/eggs',
+                                                            {
+                                                                sort: filters.sort,
+                                                                direction: filters.direction,
+                                                                per_page: filters.per_page,
+                                                                tag: '',
+                                                                search: '',
+                                                            },
+                                                            {
+                                                                preserveScroll: true,
+                                                                preserveState: false,
+                                                                replace: true, // <-- Esto fuerza que los filtros queden vacíos
+                                                            },
+                                                        );
+                                                    }}
+                                                    className="text-sm font-semibold text-red-400 hover:text-red-300"
+                                                >
+                                                    Reset
+                                                </button>
+                                            </div>
+
+                                            <div>
+                                                <label htmlFor="tags" className="mb-3 block text-sm font-medium text-cyan-300">
+                                                    Tag
+                                                </label>
+                                                <div className="relative">
+                                                    <button
+                                                        onClick={() => setShowDropdown(!showDropdown)}
+                                                        className="w-full rounded border bg-black px-3 py-2 pr-10 text-left text-sm text-cyan-200"
+                                                    >
+                                                        {selectedTag || 'Select an option'}
+                                                        <ChevronDown className="absolute top-1/2 right-2 h-4 w-4 -translate-y-1/2 text-cyan-400" />
+                                                    </button>
+
+                                                    {selectedTag && (
+                                                        <button
+                                                            onClick={() => {
+                                                                setSelectedTag('');
+                                                                setTagSearch('');
+                                                                router.get(
+                                                                    '/eggs',
+                                                                    {
+                                                                        ...filters,
+                                                                        tag: '',
+                                                                    },
+                                                                    {
+                                                                        preserveScroll: true,
+                                                                        preserveState: true,
+                                                                    },
+                                                                );
+                                                            }}
+                                                            className="absolute top-1/2 right-7 -translate-y-1/2 text-cyan-400 hover:text-red-500"
+                                                            title="Clear tag"
+                                                        >
+                                                            &times;
+                                                        </button>
+                                                    )}
+
+                                                    {showDropdown && (
+                                                        <div className="absolute z-50 mt-1 w-full bg-black">
+                                                            <input
+                                                                type="text"
+                                                                placeholder="Start typing to search..."
+                                                                value={tagSearch}
+                                                                onChange={(e) => setTagSearch(e.target.value)}
+                                                                className="w-full border-b bg-black px-3 py-2 text-sm text-cyan-200 placeholder:text-cyan-600 focus:outline-none"
+                                                            />
+                                                            <ul className="max-h-60 overflow-y-auto">
+                                                                {availableTags
+                                                                    .filter((tag) => tag.toLowerCase().includes(tagSearch.toLowerCase()))
+                                                                    .map((tag) => (
+                                                                        <li
+                                                                            key={tag}
+                                                                            onClick={() => {
+                                                                                setSelectedTag(tag);
+                                                                                setShowDropdown(false);
+                                                                                router.get(
+                                                                                    '/eggs',
+                                                                                    {
+                                                                                        ...filters,
+                                                                                        tag,
+                                                                                    },
+                                                                                    {
+                                                                                        preserveScroll: true,
+                                                                                        preserveState: true,
+                                                                                    },
+                                                                                );
+                                                                            }}
+                                                                            className="cursor-pointer px-3 py-2 text-sm text-cyan-200 hover:bg-cyan-800"
+                                                                        >
+                                                                            {tag}
+                                                                        </li>
+                                                                    ))}
+                                                            </ul>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
                     </form>
 
+                    {selectedEggs.length > 0 && (
+                        <div className="flex items-center justify-between border-b border-cyan-700 bg-black px-4 py-2 text-sm text-cyan-200 shadow-[0_0_5px_#0ff]">
+                            <span className="text-cyan-400">
+                                {selectedEggs.length} {selectedEggs.length === 1 ? 'record' : 'records'} selected
+                            </span>
+                            <div className="flex items-center gap-3">
+                                {!allSelected && (
+                                    <button onClick={toggleSelectAll} className="text-blue-400 hover:text-blue-200">
+                                        Select all {eggs.data.length}
+                                    </button>
+                                )}
+                                <button onClick={() => setSelectedEggs([])} className="text-red-400 hover:text-red-300">
+                                    Deselect all
+                                </button>
+                            </div>
+                        </div>
+                    )}
+
                     {/* Table */}
-                    <div className="overflow-hidden rounded-lg border border-cyan-700 bg-neutral-950 shadow-[0_0_10px_#0ff3]">
+                    <div className="overflow-hidden border border-cyan-700 bg-neutral-950">
                         <table className="min-w-full table-auto text-sm">
-                            <thead>
+                            <thead className="border-b border-cyan-700 bg-black text-cyan-300">
                                 <tr>
-                                    <th className="px-4 py-2 text-left">
-                                        <button onClick={handleSort} className="flex items-center gap-1 text-cyan-300 hover:text-cyan-100">
+                                    <th className="px-4 py-3 text-left">
+                                        <input type="checkbox" checked={allSelected} onChange={toggleSelectAll} className="accent-cyan-400" />
+                                    </th>
+                                    <th className="px-4 py-3 text-left">
+                                        <button onClick={handleSort} className="flex items-center gap-1 font-semibold hover:text-white">
                                             Name
                                             {filters.sort === 'name' &&
                                                 (filters.direction === 'asc' ? (
@@ -255,10 +342,11 @@ export default function Eggs() {
                                                 ))}
                                         </button>
                                     </th>
-                                    <th className="px-4 py-2 text-left">Servers</th>
-                                    <th className="px-4 py-2 text-right">Actions</th>
+                                    <th className="px-4 py-3 text-left font-semibold">Servers</th>
+                                    <th className="px-4 py-3 text-right font-semibold">Actions</th>
                                 </tr>
                             </thead>
+
                             <tbody>
                                 {eggs.data.length === 0 ? (
                                     <tr>
@@ -271,25 +359,39 @@ export default function Eggs() {
                                         <tr
                                             key={egg.id}
                                             onClick={() => router.visit(`/eggs/${egg.id}/edit`)}
-                                            className="cursor-pointer border-t border-cyan-800 transition hover:bg-cyan-900/20"
+                                            className={`border-t border-cyan-800 transition hover:bg-cyan-900/20 ${
+                                                selectedEggs.includes(egg.id) ? 'bg-cyan-900/30' : ''
+                                            }`}
                                         >
+                                            <td className="px-4 py-4 align-top">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={selectedEggs.includes(egg.id)}
+                                                    onChange={() => toggleSelect(egg.id)}
+                                                    className="accent-cyan-400"
+                                                    onClick={(e) => e.stopPropagation()}
+                                                />
+                                            </td>
+
                                             <td className="px-4 py-4">
                                                 <div className="flex flex-col">
-                                                    <span className="inline-flex items-center gap-1 font-semibold text-white">
+                                                    <span className="inline-flex items-center gap-2 font-semibold text-white">
                                                         <Egg className="h-4 w-4 text-cyan-400" />
                                                         {egg.name}
                                                     </span>
-                                                    <span className="text-sm text-cyan-400">{egg.description}</span>
+                                                    <span className="mt-1 text-sm text-cyan-400">{egg.description}</span>
                                                 </div>
                                             </td>
+
                                             <td className="px-4 py-4 text-center">
                                                 <div className="inline-flex items-center gap-1 text-cyan-300">
                                                     <Server className="h-4 w-4" />
                                                     {egg.servers ?? 0}
                                                 </div>
                                             </td>
+
                                             <td className="px-4 py-4 text-right">
-                                                <div className="flex items-center justify-end gap-2" onClick={(e) => e.stopPropagation()}>
+                                                <div className="flex items-center justify-end gap-3" onClick={(e) => e.stopPropagation()}>
                                                     <button
                                                         title="Edit"
                                                         className="text-cyan-300 hover:text-cyan-100"
