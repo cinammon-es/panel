@@ -1,13 +1,14 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use App\Http\Controllers\PostController;
-use App\Http\Controllers\TicketController;
-use App\Http\Controllers\EggController;
-use App\Http\Controllers\SettingsController;
-use App\Http\Controllers\NodeController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\EggController;
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\NodeController;
+use App\Http\Controllers\TicketController;
+use App\Http\Controllers\ServerController;
+use App\Http\Controllers\SettingsController;
 
 Route::get('/', function () {
     return Inertia::render('welcome');
@@ -36,6 +37,7 @@ Route::put('/tickets/{id}', [TicketController::class, 'update'])->name('tickets.
 Route::delete('/tickets/{ticket}/messages/{message}', [TicketController::class, 'destroyMessage'])->name('tickets.messages.destroy');
 Route::resource('eggs', EggController::class);
 Route::resource('nodes', NodeController::class);
+Route::resource('servers', ServerController::class);
 
 
 require __DIR__.'/settings.php';
