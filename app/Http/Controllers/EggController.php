@@ -9,24 +9,35 @@ use Inertia\Response;
 
 class EggController extends Controller
 {
-
-    public function index(Request $request)
+    public function index(Request $request): Response
     {
         $query = Egg::query();
 
+        // Filtro por tag (se asume texto separado por comas en la base de datos)
         if ($request->filled('tag')) {
-            $query->whereJsonContains('tags', $request->input('tag'));
+            $query->where('tags', 'like', '%' . $request->input('tag') . '%');
         }
 
+        // Filtro por búsqueda
         if ($request->filled('search')) {
             $query->where('name', 'like', '%' . $request->input('search') . '%');
         }
 
+        // Ordenamiento opcional
+        if ($request->filled('sort') && $request->filled('direction')) {
+            $query->orderBy($request->input('sort'), $request->input('direction'));
+        }
+
+        // Obtener los resultados paginados
         $eggs = $query->paginate($request->input('per_page', 10))->withQueryString();
 
-        // EXTRAEMOS TODOS LOS TAGS DE TODOS LOS EGGS
-        $tags = Egg::pluck('tags') // asumiendo que es un array tipo json en DB
-            ->flatten()
+        // Extraer todos los tags únicos desde el campo tipo texto separado por comas
+        $tags = Egg::pluck('tags')
+            ->filter()
+            ->flatMap(function ($item) {
+                return explode(',', $item); // ya que vienen como string plano
+            })
+            ->map(fn($tag) => trim($tag))
             ->filter()
             ->unique()
             ->values();
