@@ -1,9 +1,53 @@
 import AppLayout from '@/layouts/app-layout';
-import { Head } from '@inertiajs/react';
-import { useState } from 'react';
+import { Head, usePage, router } from '@inertiajs/react';
+import { ChevronDown, ChevronUp } from 'lucide-react';
+interface NodeItem {
+    id: number;
+    name: string;
+    address: string;
+    ssl: boolean;
+    servers: number;
+    public: boolean;
+    health: string;
+}
+interface Pagination<T> {
+    data: T[];
+    current_page: number;
+    last_page: number;
+    per_page: number;
+    total: number;
+    links: {
+        url: string | null;
+        label: string;
+        active: boolean;
+    }[];
+}
 
 export default function Nodes() {
-    const [search, setSearch] = useState('');
+    const { nodes, filters } = usePage<{
+        nodes: Pagination<NodeItem>;
+        filters: { search?: string; sort?: string; direction?: string; per_page?: number };
+    }>().props;
+
+
+    const handleSort = (column: string) => {
+        const isSameField = filters.sort === column;
+        const newDirection = isSameField && filters.direction === 'asc' ? 'desc' : 'asc';
+
+        router.get(
+            '/nodes',
+            {
+                ...filters,
+                sort: column,
+                direction: newDirection,
+            },
+            {
+                preserveState: true,
+                preserveScroll: true,
+            },
+        );
+    };
+    
 
     return (
         <AppLayout breadcrumbs={[{ title: 'Nodes', href: '/nodes' }]}>
@@ -27,72 +71,167 @@ export default function Nodes() {
                     </div>
                 </div>
 
-                {/* Search + Filter */}
-                <div className="mb-6 flex items-center gap-2">
-                    <div className="relative flex-1">
-                        <input
-                            type="text"
-                            placeholder="Search nodes..."
-                            value={search}
-                            onChange={(e) => setSearch(e.target.value)}
-                            className="w-full rounded border border-cyan-300 bg-white px-3 py-2 pl-10 text-sm text-cyan-800 shadow-none placeholder:text-cyan-500 dark:border-cyan-700 dark:bg-black dark:text-cyan-200 dark:shadow-[0_0_5px_#0ff] dark:placeholder:text-cyan-600"
-                        />
-                        <span className="absolute top-1/2 left-3 -translate-y-1/2 text-cyan-500 dark:text-cyan-600">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m0 0A7 7 0 103 10a7 7 0 0012 5z" />
-                            </svg>
-                        </span>
-                    </div>
-                    <button
-                        onClick={() => alert('Open filters')}
-                        className="rounded border border-pink-400 bg-pink-100/50 px-3 py-2 text-pink-800 transition hover:bg-pink-200/70 dark:border-pink-500 dark:bg-pink-900/30 dark:text-pink-300 dark:hover:bg-pink-700/50"
-                        title="Filter"
-                    >
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={1.5}
-                                d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707l-6.414 6.414A1 1 0 0014 13.414V18a1 1 0 01-.447.832l-4 2.5A1 1 0 018 20.5V13.414a1 1 0 00-.293-.707L1.293 6.707A1 1 0 011 6V4z"
-                            />
-                        </svg>
-                    </button>
-                </div>
-
                 {/* Tabla vacía */}
                 <div className="overflow-hidden rounded-lg border border-cyan-300 bg-white shadow-none transition dark:border-cyan-700 dark:bg-neutral-950 dark:shadow-[0_0_10px_#0ff3]">
                     <table className="min-w-full table-auto text-sm">
                         <thead className="bg-cyan-100 text-cyan-700 dark:bg-cyan-950/20 dark:text-cyan-300">
                             <tr>
-                                <th className="px-4 py-2 text-left">Name</th>
-                                <th className="px-4 py-2 text-left">Address</th>
-                                <th className="px-4 py-2 text-left">Status</th>
-                                <th className="px-4 py-2 text-right">Actions</th>
+                                <th className="px-4 py-2 text-left">Health</th>
+
+                                <th className="px-4 py-2 text-left">
+                                    <button onClick={() => handleSort('name')} className="flex items-center gap-2 text-cyan-400 hover:text-cyan-100">
+                                        <span>Name</span>
+                                        {filters.sort === 'name' ? (
+                                            filters.direction === 'asc' ? (
+                                                <ChevronUp />
+                                            ) : (
+                                                <ChevronDown />
+                                            )
+                                        ) : (
+                                            <ChevronDown className="opacity-30" />
+                                        )}
+                                    </button>
+                                </th>
+
+                                <th className="px-4 py-2 text-left">
+                                    <button
+                                        onClick={() => handleSort('address')}
+                                        className="flex items-center gap-2 text-cyan-400 hover:text-cyan-100"
+                                    >
+                                        <span>Address</span>
+                                        {filters.sort === 'address' ? (
+                                            filters.direction === 'asc' ? (
+                                                <ChevronUp />
+                                            ) : (
+                                                <ChevronDown />
+                                            )
+                                        ) : (
+                                            <ChevronDown className="opacity-30" />
+                                        )}
+                                    </button>
+                                </th>
+
+                                <th className="px-4 py-2 text-left">
+                                    <button onClick={() => handleSort('ssl')} className="flex items-center gap-2 text-cyan-400 hover:text-cyan-100">
+                                        <span>SSL</span>
+                                        {filters.sort === 'ssl' ? (
+                                            filters.direction === 'asc' ? (
+                                                <ChevronUp />
+                                            ) : (
+                                                <ChevronDown />
+                                            )
+                                        ) : (
+                                            <ChevronDown className="opacity-30" />
+                                        )}
+                                    </button>
+                                </th>
+
+                                <th className="px-4 py-2 text-left"> Public </th>
+
+                                <th className="px-4 py-2 text-left">
+                                    <button
+                                        onClick={() => handleSort('servers')}
+                                        className="flex items-center gap-2 text-cyan-400 hover:text-cyan-100"
+                                    >
+                                        <span>Servers</span>
+                                        {filters.sort === 'servers' ? (
+                                            filters.direction === 'asc' ? (
+                                                <ChevronUp />
+                                            ) : (
+                                                <ChevronDown />
+                                            )
+                                        ) : (
+                                            <ChevronDown className="opacity-30" />
+                                        )}
+                                    </button>
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td colSpan={4} className="px-4 py-6 text-center text-cyan-500 dark:text-cyan-600">
-                                    No nodes found.
-                                </td>
-                            </tr>
+                            {nodes.data.length === 0 ? (
+                                <tr className="border-b border-cyan-300 dark:border-cyan-700">
+                                    <td colSpan={6} className="px-6 py-6 text-center text-sm text-gray-500 dark:text-gray-400">
+                                        No nodes found.
+                                    </td>
+                                </tr>
+                            ) : (
+                                nodes.data.map((node) => (
+                                    <tr key={node.id} className="cursor-pointer border-b border-cyan-800 hover:bg-cyan-900/10">
+                                        <td className="px-4 py-2">{node.health}</td>
+                                        <td className="px-4 py-2">{node.name}</td>
+                                        <td className="px-4 py-2">{node.address}</td>
+                                        <td className="px-4 py-2">{node.ssl ? '🔒' : '—'}</td>
+                                        <td className="px-4 py-2">{node.public ? '🌐' : '—'}</td>
+                                        <td className="px-4 py-2">{node.servers}</td>
+                                    </tr>
+                                ))
+                            )}
                         </tbody>
                     </table>
 
+                    {/* Pagination */}
+                    {nodes.links.length > 5 && (
+                        <div className="mt-6 flex justify-center p-4">
+                            <ul className="flex flex-wrap gap-2 text-sm font-medium">
+                                {nodes.links.map((link, i) => (
+                                    <li key={i}>
+                                        <button
+                                            disabled={!link.url}
+                                            onClick={() => {
+                                                if (!link.url) return;
+                                                const url = new URL(link.url);
+                                                const page = url.searchParams.get('page');
+                                                router.get(
+                                                    '/nodes',
+                                                    {
+                                                        page,
+                                                        sort: filters.sort,
+                                                        direction: filters.direction,
+                                                        per_page: filters.per_page,
+                                                    },
+                                                    { preserveScroll: true, preserveState: true },
+                                                );
+                                            }}
+                                            dangerouslySetInnerHTML={{ __html: link.label }}
+                                            className={`rounded border px-3 py-1.5 text-xs transition ${link.active ? 'border-cyan-500 bg-cyan-500 text-white shadow-md' : 'border-cyan-700 bg-black text-cyan-400 hover:bg-cyan-800/30 hover:text-white'} ${!link.url ? 'cursor-not-allowed opacity-40' : ''}`}
+                                        />
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
                     {/* Per page selector */}
                     <div className="flex items-center justify-center border-t border-cyan-300 bg-cyan-50 px-4 py-3 dark:border-cyan-700 dark:bg-neutral-950">
-                        <div className="inline-flex items-center gap-2 rounded-md border border-cyan-300 bg-white px-3 py-1.5 text-sm text-cyan-800 shadow-none dark:border-cyan-600 dark:bg-black dark:text-cyan-200 dark:shadow-[0_0_4px_#0ff]">
-                            <span className="text-cyan-600 dark:text-cyan-400">Per page</span>
-                            <select
-                                className="bg-white text-cyan-800 outline-none dark:bg-black dark:text-cyan-200"
-                                defaultValue={25}
-                                onChange={(e) => alert(`Cambiar a ${e.target.value} por página`)}
-                            >
-                                <option value="10">10</option>
-                                <option value="25">25</option>
-                                <option value="50">50</option>
-                                <option value="100">100</option>
-                            </select>
+                        <div className="inline-flex items-center overflow-hidden rounded-md border border-cyan-700 bg-black text-sm text-cyan-200 shadow-[0_0_4px_#0ff]">
+                            <span className="border-r border-cyan-700 bg-black px-4 py-2 text-cyan-400">Per page</span>
+                            <div className="relative">
+                                <select
+                                    className="appearance-none bg-black px-4 py-2 pr-8 text-cyan-200 focus:outline-none"
+                                    value={filters.per_page ?? 10}
+                                    onChange={(e) => {
+                                        const perPage = parseInt(e.target.value, 10);
+                                        router.get(
+                                            '/nodes',
+                                            {
+                                                sort: filters.sort,
+                                                direction: filters.direction,
+                                                per_page: perPage,
+                                            },
+                                            {
+                                                preserveScroll: true,
+                                                preserveState: true,
+                                            },
+                                        );
+                                    }}
+                                >
+                                    <option value="5">5</option>
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">All</option>
+                                </select>
+                                <ChevronDown className="pointer-events-none absolute top-1/2 right-2 h-4 w-4 -translate-y-1/2 text-cyan-400" />
+                            </div>
                         </div>
                     </div>
                 </div>
