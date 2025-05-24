@@ -82,27 +82,29 @@ export default function Eggs() {
                 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&display=swap" rel="stylesheet" />
             </Head>
 
-            <div className="min-h-screen bg-black p-6 font-[Orbitron] text-white transition-colors">
+            <div className="min-h-screen bg-white p-6 font-[Orbitron] text-black transition-colors dark:bg-black dark:text-white">
                 {/* Header */}
                 <div className="mb-6 flex items-center justify-between border-cyan-600">
-                    <h1 className="text-3xl font-semibold tracking-widest text-cyan-400 drop-shadow-[0_0_5px_#0ff]">EGGS</h1>
+                    <h1 className="text-3xl font-semibold tracking-widest text-cyan-800 drop-shadow-none dark:text-cyan-400 dark:drop-shadow-[0_0_5px_#0ff]">
+                        EGGS
+                    </h1>
                     <div className="flex gap-2">
                         <button
                             onClick={() => alert('Import')}
-                            className="rounded border border-cyan-500 bg-cyan-900/30 px-4 py-1.5 text-sm text-cyan-300 transition hover:bg-cyan-700/50"
+                            className="rounded border border-purple-400 bg-purple-100/50 px-4 py-1.5 text-sm text-purple-800 transition hover:bg-purple-200/70 dark:border-purple-500 dark:bg-purple-900/30 dark:text-purple-300 dark:hover:bg-purple-700/50"
                         >
                             Import
                         </button>
                         <button
                             onClick={() => router.visit('/eggs/create')}
-                            className="rounded border border-purple-500 bg-purple-900/30 px-4 py-1.5 text-sm text-purple-300 transition hover:bg-purple-700/50"
+                            className="rounded border border-purple-400 bg-purple-100/50 px-4 py-1.5 text-sm text-purple-800 transition hover:bg-purple-200/70 dark:border-purple-500 dark:bg-purple-900/30 dark:text-pink-300 dark:hover:bg-pink-700/50"
                         >
                             New Egg
                         </button>
                     </div>
                 </div>
 
-                <div className="rounded-xl border border-cyan-700 bg-[#0a0a0a]">
+                <div className="overflow-hidden rounded-lg border border-cyan-300 bg-white shadow-none transition dark:border-cyan-700 dark:bg-neutral-950 dark:shadow-[0_0_10px_#0ff3]">
                     {/* Search and filters */}
                     <form onSubmit={handleSearch} className="flex w-full items-center justify-between gap-4 px-4 py-2">
                         {/* Bulk Actions */}
@@ -112,20 +114,21 @@ export default function Eggs() {
                                     <div className="relative inline-block">
                                         <button
                                             onClick={() => setShowBulkMenu(!showBulkMenu)}
-                                            className="flex items-center gap-2 rounded border border-cyan-500 bg-cyan-900/30 px-3 py-1.5 text-cyan-300 hover:bg-cyan-700/50"
+                                            className="flex items-center gap-2 rounded border border-cyan-500 px-3 py-1.5 text-sm "
                                         >
                                             Bulk actions
                                         </button>
 
                                         {showBulkMenu && (
-                                            <div className="absolute left-0 z-50 mt-2 w-51 rounded border border-cyan-700 bg-black shadow-[0_0_10px_#0ff]">
+                                            <div className="absolute left-0 z-50 mt-2 w-58 rounded border border-cyan-700 bg-white shadow-lg dark:border-cyan-700 dark:bg-neutral-950">
                                                 <ul className="py-1">
                                                     <li>
                                                         <button
-                                                            onClick={() => { 
+                                                            onClick={() => {
+                                                                alert(`Deleting ${selectedEggs.length} eggs`);
                                                                 setShowBulkMenu(false);
                                                             }}
-                                                            className="flex w-full items-center gap-2 px-4 py-2 text-left text-pink-400 hover:bg-pink-800/30"
+                                                            className="flex w-full items-center gap-2 px-4 py-2 text-left text-red-400 hover:bg-red-800/30"
                                                         >
                                                             <Trash2 className="h-4 w-4" />
                                                             Delete selected
@@ -134,9 +137,10 @@ export default function Eggs() {
                                                     <li>
                                                         <button
                                                             onClick={() => {
+                                                                alert(`Updating ${selectedEggs.length} eggs`);
                                                                 setShowBulkMenu(false);
                                                             }}
-                                                            className="flex w-full items-center gap-2 px-4 py-2 text-left text-green-400 hover:bg-green-800/30"
+                                                            className="flex w-full items-center gap-2 px-4 py-2 text-left dark:text-green-400 hover:bg-green-800/30"
                                                         >
                                                             <Upload className="h-4 w-4" />
                                                             Update selected
@@ -146,8 +150,6 @@ export default function Eggs() {
                                             </div>
                                         )}
                                     </div>
-
-                                    
                                 </div>
                             )}
                         </div>
@@ -160,7 +162,7 @@ export default function Eggs() {
                                     placeholder="Search eggs..."
                                     value={search}
                                     onChange={(e) => setSearch(e.target.value)}
-                                    className="w-full rounded border border-cyan-700 bg-black px-3 py-2 pl-10 text-sm text-cyan-200 shadow-[0_0_5px_#0ff] placeholder:text-cyan-600"
+                                    className="w-full rounded border border-cyan-300 bg-white px-3 py-2 pl-10 text-sm text-cyan-800 shadow-[0_0_5px_#0ff] placeholder:text-cyan-600 dark:border-cyan-700 dark:bg-black dark:text-cyan-200"
                                 />
                                 <span className="absolute top-1/2 left-3 -translate-y-1/2 text-cyan-600">
                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -228,7 +230,7 @@ export default function Eggs() {
                                                 <div className="relative">
                                                     <button
                                                         onClick={() => setShowDropdown(!showDropdown)}
-                                                        className="w-full rounded border bg-black px-3 py-2 pr-10 text-left text-sm text-cyan-200"
+                                                        className="w-full rounded border bg-black px-3 py-2 pr-10 text-left text-sm  text-cyan-200 shadow-[0_0_5px_#0ff] placeholder:text-cyan-600 focus:outline-none"
                                                     >
                                                         {selectedTag || 'Select an option'}
                                                         <ChevronDown className="absolute top-1/2 right-2 h-4 w-4 -translate-y-1/2 text-cyan-400" />
@@ -306,7 +308,7 @@ export default function Eggs() {
                     </form>
 
                     {selectedEggs.length > 0 && (
-                        <div className="flex items-center justify-between border-b border-cyan-700 bg-black px-4 py-2 text-sm text-cyan-200 shadow-[0_0_5px_#0ff]">
+                        <div className="flex items-center justify-between border-b border-cyan-300 border-cyan-700 bg-white px-4 py-2 shadow-none transition dark:border-cyan-700 dark:bg-neutral-950 dark:shadow-[0_0_10px_#0ff3]">
                             <span className="text-cyan-400">
                                 {selectedEggs.length} {selectedEggs.length === 1 ? 'record' : 'records'} selected
                             </span>
@@ -324,9 +326,9 @@ export default function Eggs() {
                     )}
 
                     {/* Table */}
-                    <div className="overflow-hidden border border-cyan-700 bg-neutral-950">
+                    <div className="overflow-hidden border border-cyan-300 bg-white shadow-none transition dark:border-cyan-700 dark:bg-neutral-950 dark:shadow-[0_0_10px_#0ff3]">
                         <table className="min-w-full table-auto text-sm">
-                            <thead className="border-b border-cyan-700 bg-black text-cyan-300">
+                            <thead className="border border-b border-cyan-300 bg-white shadow-none transition dark:border-cyan-700 dark:bg-neutral-950 dark:shadow-[0_0_10px_#0ff3]">
                                 <tr>
                                     <th className="px-4 py-3 text-left">
                                         <input type="checkbox" checked={allSelected} onChange={toggleSelectAll} className="accent-cyan-400" />
@@ -375,16 +377,16 @@ export default function Eggs() {
 
                                             <td className="px-4 py-4">
                                                 <div className="flex flex-col">
-                                                    <span className="inline-flex items-center gap-2 font-semibold text-white">
-                                                        <Egg className="h-4 w-4 text-cyan-400" />
+                                                    <span className="inline-flex items-center gap-2 font-semibold text-black dark:text-white">
+                                                        <Egg className="h-4 w-4" />
                                                         {egg.name}
                                                     </span>
-                                                    <span className="mt-1 text-sm text-cyan-400">{egg.description}</span>
+                                                    <span className="text-sm text-cyan-600 dark:text-cyan-400">{egg.description}</span>
                                                 </div>
                                             </td>
 
                                             <td className="px-4 py-4 text-center">
-                                                <div className="inline-flex items-center gap-1 text-cyan-300">
+                                                <div className="inline-flex items-center gap-1 font-semibold text-cyan-600 dark:text-cyan-400">
                                                     <Server className="h-4 w-4" />
                                                     {egg.servers ?? 0}
                                                 </div>
@@ -394,7 +396,7 @@ export default function Eggs() {
                                                 <div className="flex items-center justify-end gap-3" onClick={(e) => e.stopPropagation()}>
                                                     <button
                                                         title="Edit"
-                                                        className="text-cyan-300 hover:text-cyan-100"
+                                                        className="text-sm text-cyan-600 dark:text-cyan-400"
                                                         onClick={() => router.visit(`/eggs/${egg.id}/edit`)}
                                                     >
                                                         <Pencil className="h-4 w-4" />
@@ -445,7 +447,7 @@ export default function Eggs() {
                                                         },
                                                     );
                                                 }}
-                                                className="cursor-pointer px-3 py-2 text-sm text-cyan-200 hover:bg-cyan-800"
+                                                className="cursor-pointer px-3 py-2 text-sm text-cyan-600 dark:text-cyan-400"
                                             >
                                                 {tag}
                                             </li>
@@ -454,12 +456,12 @@ export default function Eggs() {
                             </div>
                         )}
 
-                        <div className="flex items-center justify-center border-t border-cyan-300 bg-cyan-50 px-4 py-3 dark:border-cyan-700 dark:bg-neutral-950">
-                            <div className="inline-flex items-center overflow-hidden rounded-md border border-cyan-700 bg-black text-sm text-cyan-200 shadow-[0_0_4px_#0ff]">
-                                <span className="border-r border-cyan-700 bg-black px-4 py-2 text-cyan-400">Per page</span>
+                        <div className="flex items-center justify-center border-t border-cyan-300 bg-white px-4 py-2 shadow-none transition dark:border-cyan-700 dark:bg-neutral-950 dark:shadow-[0_0_10px_#0ff3]">
+                            <div className="inline-flex items-center overflow-hidden rounded-md border border-cyan-700 text-sm text-cyan-600 dark:border-cyan-700 dark:bg-neutral-950">
+                                <span className="border-r px-4 py-2 text-sm text-cyan-600 dark:text-cyan-400">Per page</span>
                                 <div className="relative">
                                     <select
-                                        className="appearance-none bg-black px-4 py-2 pr-8 text-cyan-200 focus:outline-none"
+                                        className="appearance-none px-4 py-2 pr-8 text-sm text-cyan-600 focus:outline-none dark:bg-neutral-950 dark:text-cyan-400"
                                         value={filters.per_page ?? 10}
                                         onChange={(e) => {
                                             const perPage = parseInt(e.target.value, 10);
