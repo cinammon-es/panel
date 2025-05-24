@@ -23,8 +23,8 @@ function AuthLayout({ description, children }: { title: string; description?: st
                             <img src="favicon.ico" alt="Cinammon.net Logo" className="h-20 transition hover:opacity-80 sm:h-22" draggable={false} />
                         </Link>
                     </div>
-                    <h1 className="text-3xl font-bold tracking-wide text-pink-400">Regístrate</h1>
-                    {description && <p className="mt-2 text-sm text-pink-200">{description}</p>}
+                    <h1 className="font-[Orbitron] text-3xl tracking-wide text-pink-400">Regístrate</h1>
+                    {description && <p className="mt-2 font-[Orbitron] text-sm text-pink-200">{description}</p>}
                 </div>
                 {children}
             </div>
@@ -55,9 +55,12 @@ export default function Register() {
     };
 
     return (
-        <AuthLayout title='Registro' description="Crea tu cuenta para acceder al panel de cinammon.net">
-            <Head title="Registro" />
-            <form className="flex flex-col gap-6" onSubmit={submit}>
+        <AuthLayout title="Registro" description="Crea tu cuenta para acceder al panel de cinammon.net">
+            <Head title="Registro">
+                <meta name="description" content="Crea tu cuenta para acceder al panel de cinammon.net" />
+                <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&display=swap" rel="stylesheet" />
+            </Head>
+            <form className="flex flex-col gap-6 font-[Orbitron]" onSubmit={submit}>
                 <div className="grid gap-6">
                     <div className="grid gap-2">
                         <Label htmlFor="name">Nombre completo</Label>

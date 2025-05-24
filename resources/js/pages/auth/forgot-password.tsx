@@ -22,8 +22,8 @@ function AuthLayout({ description, children }: { title: string; description?: st
                             <img src="favicon.ico" alt="Cinammon.net Logo" className="h-20 transition hover:opacity-80 sm:h-22" draggable={false} />
                         </Link>
                     </div>
-                    <h1 className="text-3xl font-bold tracking-wide text-pink-400">¿Olvidaste contraseña?</h1>
-                    {description && <p className="mt-2 text-sm text-pink-200">{description}</p>}
+                    <h1 className="text-2xl font-bold tracking-wide text-pink-400 font-[Orbitron]">¿Olvidaste contraseña?</h1>
+                    {description && <p className="mt-2 text-sm text-pink-200 font-[Orbitron]">{description}</p>}
                 </div>
                 {children}
             </div>
@@ -43,11 +43,14 @@ export default function ForgotPassword({ status }: { status?: string }) {
 
     return (
         <AuthLayout title="Recuperación" description="Ingresa tu correo para recibir un enlace de recuperación">
-            <Head title="Recuperar contraseña" />
+            <Head title="Recuperar contraseña"> 
+                <meta name="description" content="Ingresa tu correo para recibir un enlace de recuperación" />
+                <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&display=swap" rel="stylesheet" />
+            </Head>
 
             {status && <div className="mb-4 text-center text-sm font-medium text-green-500">{status}</div>}
 
-            <form onSubmit={submit} className="flex flex-col gap-6">
+            <form onSubmit={submit} className="flex flex-col gap-6 font-[Orbitron]">
                 <div className="grid gap-2">
                     <Label htmlFor="email">Correo electrónico</Label>
                     <Input

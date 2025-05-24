@@ -23,8 +23,8 @@ function AuthLayout({ description, children }: { title: string; description?: st
                             <img src="favicon.ico" alt="Cinammon.net Logo" className="h-20 transition hover:opacity-80 sm:h-22" draggable={false} />
                         </Link>
                     </div>
-                    <h1 className="text-3xl font-bold tracking-wide text-pink-400">Inicia Sesión</h1>
-                    {description && <p className="mt-2 text-sm text-pink-200">{description}</p>}
+                    <h1 className="font-[Orbitron] text-3xl font-bold tracking-wide text-pink-400">Inicia Sesión</h1>
+                    {description && <p className="font-[Orbitron] mt-2 text-sm text-pink-200">{description}</p>}
                 </div>
                 {children}
             </div>
@@ -59,8 +59,11 @@ export default function Login({ status, canResetPassword }: LoginProps) {
 
     return (
         <AuthLayout title="Incia Sesión" description="Ingresa tu correo y contraseña para acceder al panel">
-            <Head title="Iniciar sesión" />
-            <form className="flex flex-col gap-6" onSubmit={submit}>
+            <Head title="Iniciar sesión">
+                <meta name="description" content="Ingresa tu correo y contraseña para acceder al panel" />
+                <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&display=swap" rel="stylesheet" />
+            </Head>
+            <form className="flex flex-col gap-6 font-[Orbitron]" onSubmit={submit}>
                 <div className="grid gap-6">
                     <div className="grid gap-2">
                         <Label htmlFor="email">Correo electrónico</Label>
@@ -110,7 +113,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                         />
                         <Label htmlFor="remember">Recordarme</Label>
                     </div>
-                    <Button type="submit" className="mt-4 w-full bg-pink-600 transition-all hover:bg-pink-700" tabIndex={4} disabled={processing}>
+                    <Button type="submit" className="mt-4 w-full bg-pink-600 transition-all hover:bg-pink-700 font-[Orbitron]" disabled={processing} tabIndex={4}>
                         {processing && <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />}
                         Entrar al panel
                     </Button>
